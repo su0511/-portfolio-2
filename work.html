@@ -8,278 +8,387 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/swup@4"></script>
 </head>
 <body>
     <!-- Custom Cursor -->
     <div class="cursor"></div>
     
-    <!-- Fixed UI Elements -->
-    <div class="fixed-nav top-left">HELLO SUSAN HE</div>
-    <div class="fixed-nav top-right">XUESONG</div>
-    <div class="fixed-nav bottom-right">
-        <a href="#info" aria-label="View contact information">INFO</a>
-    </div>
-    <div class="fixed-nav bottom-left">© 2024 ALL RIGHTS RESERVED.</div>
+    <!-- Fixed Navigation -->
+    <nav class="fixed-nav fixed-top">
+        <a href="index.html">XUESONG</a>
+        <a href="work.html">WORK</a>
+        <a href="info.html">INFO</a>
+    </nav>
+    <div id="copyright">© 2024 ALL RIGHTS RESERVED.</div>
     
     <!-- Main Content -->
-    <main class="work-container">
+    <main id="swup" class="transition-fade work-container">
         <!-- Project 1 -->
-        <section class="project" data-project="1">
-            <div class="project-header">
-                <div class="project-number">Project 1</div>
-                <div class="project-category">Information Design</div>
-            </div>
-            <div class="project-content">
-                <div class="project-carousel">
-                    <div class="carousel-container">
-                        <div class="carousel-track" data-project="1">
-                            <div class="carousel-slide active">
-                                <img src="media/project1/1.jpg" alt="Hyperion Reading Journey - Cover Design" loading="lazy" decoding="async">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="media/project1/2.jpg" alt="Hyperion Reading Journey - Vinyl Record Design" loading="lazy" decoding="async">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="media/project1/3.gif" alt="Hyperion Reading Journey - Animation Preview" loading="lazy" decoding="async">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow carousel-prev" aria-label="Previous image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                        <button class="carousel-arrow carousel-next" aria-label="Next image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                    </div>
+        <section class="project" id="project-1">
+            <header class="project-header">
+                <span class="project-id">Project 1</span>
+            </header>
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="1">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Hyperion Reading Journey - Cover Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Hyperion Reading Journey - Vinyl Record Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Hyperion Reading Journey - Animation Preview" decoding="async">
+                    </figure>
                 </div>
-                <div class="project-info">
-                    <h2 class="project-title">
-                        <span class="title-en">Hyperion Reading Journey</span>
-                        <span class="title-zh">超越时空的阅读之旅</span>
-                    </h2>
-                    <div class="project-credits">
-                        <div class="credit-item">
-                            <span class="credit-label">Client</span>
-                            <span class="credit-value">Personal Project</span>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Hyperion Reading Journey</h3>
+                    <p>A record of reading made literal—this project maps an emotional journey through Hyperion onto a spinning form. Quick demo of the new image interaction & lazy-loading carousel.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Personal Project</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Year</span>
-                            <span class="credit-value">2025</span>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2025</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Role</span>
-                            <span class="credit-value">Information Designer</span>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Information Designer</p>
                         </div>
                     </div>
-                </div>
+                </aside>
             </div>
         </section>
 
         <!-- Project 2 -->
-        <section class="project" data-project="2">
-            <div class="project-header">
-                <div class="project-number">Project 2</div>
-                <div class="project-category">Editorial Design</div>
-            </div>
-            <div class="project-content">
-                <div class="project-carousel">
-                    <div class="carousel-container">
-                        <div class="carousel-track" data-project="2">
-                            <div class="carousel-slide active">
-                                <img src="assets/print1.jpg" alt="Print Design Project" loading="lazy" decoding="async">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow carousel-prev" aria-label="Previous image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                        <button class="carousel-arrow carousel-next" aria-label="Next image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                    </div>
+        <section class="project" id="project-2">
+            <header class="project-header">
+                <span class="project-id">Project 2</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="2">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Editorial Design Project" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Print Layout Design" decoding="async">
+                    </figure>
                 </div>
-                <div class="project-info">
-                    <h2 class="project-title">
-                        <span class="title-en">Print Design</span>
-                        <span class="title-zh">印刷设计</span>
-                    </h2>
-                    <div class="project-credits">
-                        <div class="credit-item">
-                            <span class="credit-label">Client</span>
-                            <span class="credit-value">Editorial Studio</span>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Editorial Design</h3>
+                    <p>Contemporary magazine layout and publication design focusing on readability and visual hierarchy. Exploring the intersection of traditional print and digital media.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Editorial Studio</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Year</span>
-                            <span class="credit-value">2024</span>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2024</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Role</span>
-                            <span class="credit-value">Art Director</span>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Art Director</p>
                         </div>
                     </div>
-                </div>
+                </aside>
             </div>
         </section>
 
         <!-- Project 3 -->
-        <section class="project" data-project="3">
-            <div class="project-header">
-                <div class="project-number">Project 3</div>
-                <div class="project-category">Brand Identity Design</div>
-            </div>
-            <div class="project-content">
-                <div class="project-carousel">
-                    <div class="carousel-container">
-                        <div class="carousel-track" data-project="3">
-                            <div class="carousel-slide active">
-                                <img src="assets/packaging1.jpg" alt="Packaging Design" loading="lazy" decoding="async">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow carousel-prev" aria-label="Previous image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                        <button class="carousel-arrow carousel-next" aria-label="Next image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                    </div>
+        <section class="project" id="project-3">
+            <header class="project-header">
+                <span class="project-id">Project 3</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="3">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Brand Identity Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Packaging Design" decoding="async">
+                    </figure>
                 </div>
-                <div class="project-info">
-                    <h2 class="project-title">
-                        <span class="title-en">Packaging Design</span>
-                        <span class="title-zh">包装设计</span>
-                    </h2>
-                    <div class="project-credits">
-                        <div class="credit-item">
-                            <span class="credit-label">Client</span>
-                            <span class="credit-value">Consumer Brand</span>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Brand Identity Design</h3>
+                    <p>Comprehensive brand identity system including logo design, color palette, typography, and packaging applications for a sustainable consumer brand.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Consumer Brand</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Year</span>
-                            <span class="credit-value">2023</span>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2023</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Role</span>
-                            <span class="credit-value">Brand Designer</span>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Brand Designer</p>
                         </div>
                     </div>
-                </div>
+                </aside>
             </div>
         </section>
 
         <!-- Project 4 -->
-        <section class="project" data-project="4">
-            <div class="project-header">
-                <div class="project-number">Project 4</div>
-                <div class="project-category">Typography Design</div>
+        <section class="project" id="project-4">
+            <header class="project-header">
+                <span class="project-id">Project 4</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="4">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Typography Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Custom Typeface" decoding="async">
+                    </figure>
+                </div>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Typography Design</h3>
+                    <p>Custom typeface design and typographic systems for contemporary brands. Exploring the balance between legibility and character in digital and print applications.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Type Foundry</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2023</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Type Designer</p>
+                        </div>
+                    </div>
+                </aside>
             </div>
-            <div class="project-content">
-                <div class="project-carousel">
-                    <div class="carousel-container">
-                        <div class="carousel-track" data-project="4">
-                            <div class="carousel-slide active">
-                                <img src="assets/type1.jpg" alt="Typography Project" loading="lazy" decoding="async">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow carousel-prev" aria-label="Previous image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                        <button class="carousel-arrow carousel-next" aria-label="Next image">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                    </div>
+        </section>
+
+        <!-- Project 5 -->
+        <section class="project" id="project-5">
+            <header class="project-header">
+                <span class="project-id">Project 5</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="5">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Poster Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Event Poster" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1493932484895-752d1471eab5?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Exhibition Poster" decoding="async">
+                    </figure>
                 </div>
-                <div class="project-info">
-                    <h2 class="project-title">
-                        <span class="title-en">Typography</span>
-                        <span class="title-zh">字体设计</span>
-                    </h2>
-                    <div class="project-credits">
-                        <div class="credit-item">
-                            <span class="credit-label">Client</span>
-                            <span class="credit-value">Type Foundry</span>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Poster Design</h3>
+                    <p>Event and exhibition poster series combining bold typography with experimental layouts. Creating visual impact while maintaining clear information hierarchy.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Cultural Institution</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Year</span>
-                            <span class="credit-value">2023</span>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2023</p>
                         </div>
-                        <div class="credit-item">
-                            <span class="credit-label">Role</span>
-                            <span class="credit-value">Type Designer</span>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Graphic Designer</p>
                         </div>
                     </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Project 6 -->
+        <section class="project" id="project-6">
+            <header class="project-header">
+                <span class="project-id">Project 6</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="6">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Web Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="UI Design" decoding="async">
+                    </figure>
                 </div>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Digital Design</h3>
+                    <p>Responsive web design and digital interfaces that translate Swiss design principles to contemporary digital experiences. Focus on usability and visual clarity.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Tech Startup</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2024</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>UI/UX Designer</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Project 7 -->
+        <section class="project" id="project-7">
+            <header class="project-header">
+                <span class="project-id">Project 7</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="7">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Motion Graphics" decoding="async">
+                    </figure>
+                </div>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Motion Graphics</h3>
+                    <p>Animated visual identity and motion design for brand campaigns. Bringing static designs to life while maintaining the essence of Swiss minimalism.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Media Agency</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2023</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Motion Designer</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Project 8 -->
+        <section class="project" id="project-8">
+            <header class="project-header">
+                <span class="project-id">Project 8</span>
+            </header>
+
+            <div class="project-grid">
+                <!-- Left 8 columns: Carousel -->
+                <div class="carousel" data-project="8">
+                    <button class="arrow prev" aria-label="Prev">‹</button>
+                    <button class="arrow next" aria-label="Next">›</button>
+
+                    <figure class="slide is-active">
+                        <img src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Environmental Design" decoding="async">
+                    </figure>
+                    <figure class="slide">
+                        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80"
+                             loading="lazy" alt="Wayfinding System" decoding="async">
+                    </figure>
+                </div>
+
+                <!-- Right 4 columns: Info -->
+                <aside class="project-info">
+                    <h3>Environmental Graphics</h3>
+                    <p>Wayfinding and signage systems for public spaces. Creating intuitive navigation experiences through clear typography and systematic design approach.</p>
+
+                    <div class="info-details">
+                        <div class="detail-section">
+                            <h4>Client</h4>
+                            <p>Architecture Firm</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Year</h4>
+                            <p>2022</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4>Role</h4>
+                            <p>Environmental Designer</p>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </section>
     </main>
 
-    <!-- Info Section -->
-    <section id="info" class="info-section">
-        <div class="info-divider"></div>
-        <div class="info-content">
-            <div class="info-grid">
-                <div class="info-column">
-                    <h3>Skills</h3>
-                    <p>Brand Identity Design<br>
-                    Editorial & Publication Design<br>
-                    Information Design<br>
-                    Typography<br>
-                    Print Design</p>
-                </div>
-                <div class="info-column">
-                    <h3>Contact</h3>
-                    <p>hello@susanhe.com<br>
-                    +1 (555) 123-4567<br>
-                    New York, NY</p>
-                </div>
-                <div class="info-column">
-                    <h3>Social</h3>
-                    <p><a href="#" target="_blank">Instagram</a><br>
-                    <a href="#" target="_blank">Behance</a><br>
-                    <a href="#" target="_blank">LinkedIn</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Lightbox -->
-    <dialog class="lightbox" id="lightbox">
-        <div class="lightbox-content">
-            <button class="lightbox-close" aria-label="Close lightbox">
-                <svg viewBox="0 0 24 24" width="32" height="32">
-                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/>
-                </svg>
-            </button>
-            <div class="lightbox-image-container">
-                <img class="lightbox-image" src="" alt="" loading="lazy" decoding="async">
-            </div>
-            <div class="lightbox-nav">
-                <button class="lightbox-prev" aria-label="Previous image">
-                    <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                </button>
-                <button class="lightbox-next" aria-label="Next image">
-                    <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </dialog>
 
     <script src="script.js"></script>
 </body>

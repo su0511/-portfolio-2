@@ -8,18 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/swup@4"></script>
 </head>
 <body>
     <!-- Custom Cursor -->
     <div class="cursor"></div>
 
-    <!-- Fixed UI Elements -->
-    <div class="fixed-nav top-left">HELLO SUSAN HE</div>
-    <div class="fixed-nav top-right">XUESONG</div>
-    <div class="fixed-nav bottom-right">
-        <a href="work.html" aria-label="View work portfolio">WORK</a>
-    </div>
-    <div class="fixed-nav bottom-left">© 2024 ALL RIGHTS RESERVED.</div>
+    <!-- Fixed Navigation -->
+    <nav class="fixed-nav fixed-top">
+        <a href="index.html">XUESONG</a>
+        <a href="work.html">WORK</a>
+        <a href="info.html">INFO</a>
+    </nav>
+    <div id="copyright">© 2024 ALL RIGHTS RESERVED.</div>
 
     <!-- Loading Screen -->
     <div id="loader" class="loader">
@@ -30,7 +31,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="hero-container" id="main-content">
+    <main id="swup" class="transition-fade hero-container" id="main-content">
         <div class="hero-logo" id="hero-logo">
             <svg viewBox="0 0 200 200" class="logo-svg">
                 <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" class="logo-text">S</text>

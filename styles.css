@@ -82,45 +82,52 @@ body {
    FIXED UI ELEMENTS
    ================================== */
 
+/* ===================================
+   FIXED NAVIGATION - TOP HORIZONTAL
+   ================================== */
+
 .fixed-nav {
     position: fixed;
     font-family: var(--font-family);
     font-weight: var(--font-weight-bold);
     font-size: 14px;
     letter-spacing: 0.04em;
-    text-orientation: upright;
-    writing-mode: vertical-rl;
     z-index: 1000;
     transition: opacity 0.3s ease;
-}
-
-.fixed-nav:hover {
-    opacity: 0.6;
 }
 
 .fixed-nav a {
     color: inherit;
     text-decoration: none;
+    margin-right: 3rem;
+    transition: opacity 0.3s ease;
 }
 
-.top-left {
-    top: var(--space-md);
-    left: var(--space-md);
+.fixed-nav a:hover {
+    opacity: 0.6;
 }
 
-.top-right {
-    top: var(--space-md);
-    right: var(--space-md);
+.fixed-nav a:last-child {
+    margin-right: 0;
 }
 
-.bottom-left {
-    bottom: var(--space-md);
-    left: var(--space-md);
+.fixed-top {
+    top: 36px;
+    left: 36px;
+    display: flex;
+    align-items: center;
 }
 
-.bottom-right {
-    bottom: var(--space-md);
-    right: var(--space-md);
+#copyright {
+    position: fixed;
+    bottom: 36px;
+    right: 36px;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    z-index: 1000;
+    opacity: 0.7;
 }
 
 /* ===================================
@@ -239,7 +246,7 @@ body {
 .work-container {
     max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: var(--space-2xl) var(--space-lg);
+    padding: var(--space-xl) var(--space-lg);
     scroll-snap-type: y mandatory;
 }
 
@@ -249,23 +256,16 @@ body {
 }
 
 .project-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
     margin-bottom: var(--space-md);
     font-size: 18px;
 }
 
-.project-number {
+.project-id {
     font-weight: var(--font-weight-regular);
+    font-size: 18px;
 }
 
-.project-category {
-    font-weight: var(--font-weight-medium);
-    text-align: right;
-}
-
-.project-content {
+.project-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: var(--space-lg);
@@ -276,78 +276,73 @@ body {
    CAROUSEL SYSTEM
    ================================== */
 
-.project-carousel {
-    aspect-ratio: 4/3;
+.carousel {
     position: relative;
+    aspect-ratio: 4/3;
     overflow: hidden;
     cursor: zoom-in;
 }
 
-.carousel-container {
+.carousel img {
     width: 100%;
     height: 100%;
-    position: relative;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.carousel-track {
-    width: 100%;
-    height: 100%;
-    position: relative;
+.carousel .is-active img {
+    opacity: 1;
 }
 
-.carousel-slide {
+.slide {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    margin: 0;
+}
+
+.slide:not(.is-active) {
     opacity: 0;
-    transform: translateX(100%);
-    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    pointer-events: none;
 }
 
-.carousel-slide.active {
+.slide.is-active {
     opacity: 1;
-    transform: translateX(0);
+    pointer-events: auto;
 }
 
-.carousel-slide.prev {
-    transform: translateX(-100%);
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0;
-    transition: opacity 0.3s ease;
-}
-
-.carousel-arrow {
+.arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     width: 48px;
     height: 48px;
     border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.08);
-    border: none;
     color: var(--color-white);
+    font-size: 24px;
     cursor: pointer;
     opacity: 0.8;
     transition: opacity 0.3s ease;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.carousel-arrow:hover {
+.arrow:hover {
     opacity: 1;
 }
 
-.carousel-prev {
+.prev {
     left: 16px;
 }
 
-.carousel-next {
+.next {
     right: 16px;
 }
 
@@ -359,141 +354,117 @@ body {
     padding-left: var(--space-sm);
 }
 
-.project-title {
-    margin-bottom: var(--space-sm);
-}
-
-.title-en {
-    display: block;
+.project-info h3 {
     font-family: var(--font-family);
     font-weight: var(--font-weight-medium);
     font-size: 20px;
     line-height: 1.3;
-    margin-bottom: 4px;
+    margin-bottom: var(--space-sm);
+    color: var(--color-black);
 }
 
-.title-zh {
-    display: block;
+.project-info p {
     font-family: var(--font-family);
     font-weight: var(--font-weight-regular);
     font-size: 16px;
     line-height: 1.4;
-    opacity: 0.7;
+    margin-bottom: var(--space-md);
+    color: var(--color-black);
 }
 
-.project-credits {
+.info-details {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
 }
 
-.credit-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+.detail-section h4 {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: var(--color-black);
+}
+
+.detail-section p {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
     font-size: 14px;
     line-height: 1.4;
+    margin-bottom: 0;
+    color: var(--color-black);
 }
 
-.credit-label {
-    font-weight: var(--font-weight-medium);
-    min-width: 60px;
+.detail-section a {
+    color: var(--color-black);
+    text-decoration: none;
+    transition: opacity 0.3s ease;
 }
 
-.credit-value {
-    font-weight: var(--font-weight-regular);
-    text-align: right;
+.detail-section a:hover {
+    opacity: 0.6;
 }
 
 /* ===================================
-   LIGHTBOX
+   LIGHTBOX (Updated)
    ================================== */
 
 .lightbox {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(0, 0, 0, 0.92);
     border: none;
     padding: 0;
     z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
 }
 
-.lightbox[open] {
-    opacity: 1;
-    visibility: visible;
+.lightbox img {
+    max-width: 90vw;
+    max-height: 88vh;
+    object-fit: contain;
+    display: none;
 }
 
-.lightbox-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.lightbox-close {
-    position: absolute;
-    top: 32px;
-    right: 32px;
+.lb-prev,
+.lb-next,
+.lb-close {
+    position: fixed;
+    width: 48px;
+    height: 48px;
     background: none;
     border: none;
     color: var(--color-white);
+    font-size: 2rem;
     cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
     z-index: 10;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
 }
 
-.lightbox-close:hover {
+.lb-prev:hover,
+.lb-next:hover,
+.lb-close:hover {
     opacity: 1;
 }
 
-.lightbox-image-container {
-    max-width: 90vw;
-    max-height: 88vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.lb-prev {
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.lightbox-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+.lb-next {
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.lightbox-nav {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 16px;
-}
-
-.lightbox-prev,
-.lightbox-next {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: var(--color-white);
-    cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-
-.lightbox-prev:hover,
-.lightbox-next:hover {
-    opacity: 1;
+.lb-close {
+    right: 32px;
+    top: 32px;
 }
 
 /* ===================================
@@ -700,6 +671,22 @@ button:focus-visible,
 a:focus-visible {
     outline: 2px solid var(--color-black);
     outline-offset: 2px;
+}
+
+/* ===================================
+   SWUP PAGE TRANSITIONS
+   ================================== */
+
+.transition-fade {
+    transition: transform 0.3s ease;
+}
+
+html.is-animating .transition-fade {
+    transform: translateY(-100%);
+}
+
+html.is-rendering .transition-fade {
+    transform: translateY(100%);
 }
 
 /* End of Swiss Portfolio Styles */
