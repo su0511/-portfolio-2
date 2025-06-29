@@ -1,8 +1,3 @@
-/**
- * SUSAN HE Portfolio 2024 - Swiss Design
- * Minimal, purposeful interactions for a timeless design
- */
-
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

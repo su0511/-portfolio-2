@@ -257,7 +257,7 @@ body {
 }
 
 .explore-arrow {
-    margin-bottom: 8px;
+    margin-bottom: 60px;
     animation: arrowFloat 2s ease-in-out infinite;
 }
 
@@ -267,15 +267,30 @@ body {
 }
 
 .explore-text {
+    color: #000;
+    position: auto;
     font-family: var(--font-family);
-    font-weight: var(--font-weight-medium);
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    color: var(--color-black);
-    text-transform: lowercase;
-    opacity: 0.8;
+    font-weight: var(--font-weight-bold);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    z-index: 1000;
     transition: opacity 0.3s ease;
 }
+
+.explore-text a {
+    color: var(--color-black);
+    text-decoration: none;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    transition: opacity 0.3s ease;
+}
+
+.explore-text a:hover {
+    opacity: 0.6;
+}
+
 
 .explore-indicator:hover .arrow-svg,
 .explore-indicator:hover .explore-text {
