@@ -1,0 +1,14 @@
+{
+  "media": [
+    {
+      "url": "media/project6/1.jpg",
+      "type": "image",
+      "alt": "Project 6 - Main Image"
+    },
+    {
+      "url": "media/project6/2.jpg", 
+      "type": "image",
+      "alt": "Project 6 - Detail View"
+    }
+  ]
+}

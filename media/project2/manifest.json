@@ -1,0 +1,19 @@
+{
+  "media": [
+    {
+      "url": "media/project2/1.jpg",
+      "type": "image",
+      "alt": "Print Design - Magazine Cover"
+    },
+    {
+      "url": "media/project2/2.jpg", 
+      "type": "image",
+      "alt": "Print Design - Interior Spread"
+    },
+    {
+      "url": "media/project2/3.jpg",
+      "type": "image", 
+      "alt": "Print Design - Typography Detail"
+    }
+  ]
+}
