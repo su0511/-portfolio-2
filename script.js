@@ -76,14 +76,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===================================
 
     const heroLogo = document.getElementById('hero-logo');
+    const exploreIndicator = document.getElementById('explore-indicator');
 
-    if (heroLogo) {
-        // Click handler for hero logo
+    if (heroLogo || exploreIndicator) {
+        // Navigation function with Swup support
         function navigateToWork() {
-            window.location.href = 'work.html';
+            if (typeof Swup !== 'undefined' && window.swup) {
+                window.swup.loadPage({
+                    url: 'work.html'
+                });
+            } else {
+                window.location.href = 'work.html';
+            }
         }
 
-        heroLogo.addEventListener('click', navigateToWork);
+        // Click handlers
+        if (heroLogo) {
+            heroLogo.addEventListener('click', navigateToWork);
+        }
+
+        if (exploreIndicator) {
+            exploreIndicator.addEventListener('click', navigateToWork);
+        }
 
         // Scroll handler for hero page
         let scrollTimeout;
@@ -304,13 +318,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===================================
 
     if (typeof Swup !== 'undefined') {
-        const swup = new Swup({
+        window.swup = new Swup({
             containers: ['#swup'],
             animateHistoryBrowsing: true
         });
 
         // Re-initialize functionality after page transitions
-        swup.on('contentReplaced', function() {
+        window.swup.on('contentReplaced', function() {
             // Re-initialize carousels
             document.querySelectorAll('.carousel').forEach(carousel => {
                 // Carousel initialization code would go here

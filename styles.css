@@ -240,6 +240,69 @@ body {
 }
 
 /* ===================================
+   EXPLORE INDICATOR
+   ================================== */
+
+.explore-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + clamp(200px, 25vw, 280px) + 80px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    animation: exploreEnter 1.5s ease-out 1s both;
+}
+
+.explore-arrow {
+    margin-bottom: 8px;
+    animation: arrowFloat 2s ease-in-out infinite;
+}
+
+.arrow-svg {
+    color: var(--color-black);
+    transition: opacity 0.3s ease;
+}
+
+.explore-text {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+    text-transform: lowercase;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.explore-indicator:hover .arrow-svg,
+.explore-indicator:hover .explore-text {
+    opacity: 0.6;
+}
+
+@keyframes exploreEnter {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + clamp(200px, 25vw, 280px) + 100px));
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, calc(-50% + clamp(200px, 25vw, 280px) + 80px));
+    }
+}
+
+@keyframes arrowFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+/* ===================================
    WORK PAGE - GRID SYSTEM
    ================================== */
 
@@ -552,24 +615,31 @@ body {
 @media (max-width: 768px) {
     .fixed-nav {
         font-size: 12px;
-        writing-mode: horizontal-tb;
-        text-orientation: mixed;
     }
 
-    .top-left, .top-right {
+    .fixed-top {
         top: 24px;
-    }
-
-    .bottom-left, .bottom-right {
-        bottom: 24px;
-    }
-
-    .top-left, .bottom-left {
         left: 24px;
     }
 
-    .top-right, .bottom-right {
+    #copyright {
+        bottom: 24px;
         right: 24px;
+    }
+
+    .explore-indicator {
+        transform: translate(-50%, calc(-50% + clamp(120px, 20vw, 200px) + 60px));
+    }
+
+    @keyframes exploreEnter {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% + clamp(120px, 20vw, 200px) + 80px));
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, calc(-50% + clamp(120px, 20vw, 200px) + 60px));
+        }
     }
 
     .work-container {
@@ -647,6 +717,14 @@ body {
 
     .project {
         scroll-snap-align: none;
+    }
+
+    .explore-indicator {
+        animation: none !important;
+    }
+
+    .explore-arrow {
+        animation: none !important;
     }
 }
 
