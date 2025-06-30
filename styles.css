@@ -787,3 +787,22 @@ video {
     width: 100%; /* 使视频宽度占满父容器 */
     height: auto; /* 保持比例，避免视频变形 */
 }
+
+.carousel video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel .is-active video {
+    opacity: 1;
+}
+
+.lightbox video {
+    max-width: 90vw;
+    max-height: 88vh;
+    object-fit: contain;
+    display: none;
+}
