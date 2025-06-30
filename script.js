@@ -205,97 +205,111 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===================================
 
     function openLightbox(startIdx, slides) {
-        const dlg = document.createElement('dialog');
-        dlg.className = 'lightbox';
+        console.log('Opening lightbox for slide:', startIdx);
+
+        // Create lightbox overlay
+        const lightbox = document.createElement('div');
+        lightbox.className = 'lightbox';
+
+        // Get the current slide's media
+        const currentSlide = slides[startIdx];
+        console.log('Current slide:', currentSlide);
+
+        const img = currentSlide.querySelector('img');
+        const video = currentSlide.querySelector('video');
+
+        console.log('Found img:', img);
+        console.log('Found video:', video);
+
+        let mediaElement;
+        if (img) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = img.src;
+            mediaElement.alt = img.alt || '';
+            console.log('Created img with src:', img.src);
+
+            // Add some inline styles to ensure visibility
+            mediaElement.style.cssText = `
+                max-width: 90vw !important;
+                max-height: 90vh !important;
+                object-fit: contain !important;
+                display: block !important;
+                margin: auto !important;
+                opacity: 1 !important;
+                position: relative !important;
+                z-index: 10001 !important;
+            `;
+
+            // Add load event listener
+            mediaElement.onload = () => {
+                console.log('Image loaded successfully, dimensions:', mediaElement.naturalWidth, 'x', mediaElement.naturalHeight);
+            };
+            mediaElement.onerror = () => {
+                console.error('Image failed to load:', img.src);
+                // Try to show error message in lightbox
+                const errorMsg = document.createElement('div');
+                errorMsg.textContent = 'Failed to load image: ' + img.src;
+                errorMsg.style.color = 'white';
+                errorMsg.style.fontSize = '18px';
+                lightbox.appendChild(errorMsg);
+            };
+        } else if (video) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = video.src;
+            mediaElement.controls = true;
+            mediaElement.autoplay = true;
+            mediaElement.loop = true;
+            mediaElement.muted = true;
+            console.log('Created video with src:', video.src);
+
+            // Add some inline styles to ensure visibility
+            mediaElement.style.maxWidth = '90vw';
+            mediaElement.style.maxHeight = '90vh';
+            mediaElement.style.objectFit = 'contain';
+            mediaElement.style.display = 'block';
+        }
+
+        if (mediaElement) {
+            lightbox.appendChild(mediaElement);
+            console.log('Media element added to lightbox');
+        } else {
+            console.error('No media element found');
+        }
 
         // Create close button
         const closeBtn = document.createElement('button');
         closeBtn.className = 'lb-close';
-        closeBtn.setAttribute('aria-label', 'Close');
-        closeBtn.textContent = '×';
+        closeBtn.innerHTML = '×';
+        closeBtn.style.position = 'fixed';
+        closeBtn.style.top = '20px';
+        closeBtn.style.right = '20px';
+        closeBtn.style.zIndex = '10001';
+        lightbox.appendChild(closeBtn);
 
-        // Create navigation buttons
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'lb-prev';
-        prevBtn.setAttribute('aria-label', 'Prev');
-        prevBtn.textContent = '‹';
+        // Add to page
+        document.body.appendChild(lightbox);
 
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'lb-next';
-        nextBtn.setAttribute('aria-label', 'Next');
-        nextBtn.textContent = '›';
+        // Close functionality
+        const closeLightbox = () => {
+            document.body.removeChild(lightbox);
+        };
 
-        // Add buttons to dialog
-        dlg.appendChild(closeBtn);
-        dlg.appendChild(prevBtn);
-        dlg.appendChild(nextBtn);
-
-        // Create media elements
-        const mediaItems = [];
-        slides.forEach(slide => {
-            const img = slide.querySelector('img');
-            const video = slide.querySelector('video');
-
-            if (img) {
-                const newImg = document.createElement('img');
-                newImg.src = img.src;
-                newImg.alt = img.alt || '';
-                newImg.style.display = 'none';
-                dlg.appendChild(newImg);
-                mediaItems.push(newImg);
-            } else if (video) {
-                const newVideo = document.createElement('video');
-                newVideo.src = video.src;
-                newVideo.controls = true;
-                newVideo.autoplay = true;
-                newVideo.loop = true;
-                newVideo.muted = true;
-                newVideo.style.display = 'none';
-                dlg.appendChild(newVideo);
-                mediaItems.push(newVideo);
+        closeBtn.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
             }
         });
 
-        document.body.appendChild(dlg);
-        dlg.showModal();
-
-        let idx = startIdx;
-        const render = () => {
-            mediaItems.forEach((item, i) => {
-                item.style.display = i === idx ? 'block' : 'none';
-            });
-        };
-        render();
-
-        nextBtn.onclick = () => {
-            idx = (idx + 1) % mediaItems.length;
-            render();
-        };
-        prevBtn.onclick = () => {
-            idx = (idx - 1 + mediaItems.length) % mediaItems.length;
-            render();
-        };
-        closeBtn.onclick = () => {
-            dlg.close();
-            dlg.remove();
-        };
-
-        dlg.addEventListener('click', e => {
-            if (e.target === dlg) {
-                dlg.close();
-                dlg.remove();
-            }
-        });
-
-        document.addEventListener('keydown', e => {
-            if (!dlg.open) return;
+        // Keyboard close
+        const handleKeydown = (e) => {
             if (e.key === 'Escape') {
-                dlg.close();
-                dlg.remove();
+                closeLightbox();
+                document.removeEventListener('keydown', handleKeydown);
             }
-            if (e.key === 'ArrowRight') nextBtn.click();
-            if (e.key === 'ArrowLeft') prevBtn.click();
-        });
+        };
+        document.addEventListener('keydown', handleKeydown);
+
     }
 
 
@@ -364,19 +378,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===================================
 
     if (typeof Swup !== 'undefined') {
-        window.swup = new Swup({
-            containers: ['#swup'],
-            animateHistoryBrowsing: true
-        });
+        try {
+            window.swup = new Swup({
+                containers: ['#swup'],
+                animateHistoryBrowsing: true
+            });
 
-        // Re-initialize functionality after page transitions
-        window.swup.on('contentReplaced', function() {
-            // Re-initialize carousels
-            initCarousels();
+            // Check if swup.on method exists before using it
+            if (window.swup && typeof window.swup.on === 'function') {
+                // Re-initialize functionality after page transitions
+                window.swup.on('contentReplaced', function() {
+                    // Re-initialize carousels
+                    initCarousels();
 
-            // Re-initialize lazy loading
-            initLazyLoading();
-        });
+                    // Re-initialize lazy loading
+                    initLazyLoading();
+                });
+            } else {
+                console.log('Swup.on method not available');
+            }
+        } catch (error) {
+            console.log('Swup initialization failed:', error);
+        }
     }
 
     // ===================================
