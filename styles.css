@@ -450,6 +450,19 @@ body {
     color: var(--color-black);
 }
 
+.project-info p a {
+    color: var(--color-black);               
+    text-decoration: underline;  
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);      
+    transition: opacity 0.3s ease;
+}
+
+.project-info p a:hover {
+    opacity: 0.6;                
+}
+
+
 .info-details {
     display: flex;
     flex-direction: column;
@@ -784,16 +797,22 @@ html.is-rendering .transition-fade {
 
 /* End of Swiss Portfolio Styles */
 video {
-    width: 100%; /* 使视频宽度占满父容器 */
+    width: auto; /* 使视频宽度占满父容器 */
     height: auto; /* 保持比例，避免视频变形 */
 }
 
 .carousel video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 保证原始比例显示，不裁剪 */
     opacity: 0;
     transition: opacity 0.3s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 居中 */
 }
 
 .carousel .is-active video {
