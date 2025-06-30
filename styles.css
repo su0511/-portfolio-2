@@ -366,7 +366,7 @@ body {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    /* transition: opacity 0.3s ease; - Removed fade animation */
 }
 
 .carousel .is-active img {
@@ -383,13 +383,11 @@ body {
 }
 
 .slide:not(.is-active) {
-    opacity: 0;
-    pointer-events: none;
+    display: none;
 }
 
 .slide.is-active {
-    opacity: 1;
-    pointer-events: auto;
+    display: block;
 }
 
 .arrow {
@@ -422,6 +420,13 @@ body {
 
 .next {
     right: 16px;
+}
+
+/* Project 5 specific arrow colors */
+.carousel[data-project="5"] .arrow {
+    color: #000;
+    fill: #000;
+    background: transparent;
 }
 
 /* ===================================
@@ -512,11 +517,12 @@ body {
     z-index: 9999;
 }
 
-.lightbox img {
+.lightbox img,
+.lightbox video {
     max-width: 90vw;
     max-height: 88vh;
     object-fit: contain;
-    display: none;
+    display: block;
 }
 
 .lb-prev,
@@ -808,20 +814,29 @@ video {
     max-height: 100%;
     object-fit: contain; /* 保证原始比例显示，不裁剪 */
     opacity: 0;
-    transition: opacity 0.3s ease;
+    /* transition: opacity 0.3s ease; - Removed fade animation */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* 居中 */
 }
 
+/* Projects 4, 5, 7 video alignment - top align with h3 */
+.carousel[data-project="4"] video,
+.carousel[data-project="5"] video,
+.carousel[data-project="7"] video {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    align-self: start;
+}
+
 .carousel .is-active video {
     opacity: 1;
 }
 
-.lightbox video {
-    max-width: 90vw;
-    max-height: 88vh;
-    object-fit: contain;
-    display: none;
-}
+/* Lightbox video styles moved above to combine with img styles */

@@ -118,8 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // CAROUSEL FUNCTIONALITY (New Structure)
     // ===================================
 
-    // Initialize all carousels
-    document.querySelectorAll('.carousel').forEach(carousel => {
+    function initCarousels() {
+        // Initialize all carousels
+        document.querySelectorAll('.carousel').forEach(carousel => {
         const slides = carousel.querySelectorAll('.slide');
         let idx = 0;
 
@@ -185,15 +186,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Lightbox functionality
-        slides.forEach(slide => {
-            slide.onclick = (e) => {
-                if (!e.target.closest('.arrow')) {
-                    openLightbox([...slides].indexOf(slide), slides);
-                }
-            };
+        // Lightbox functionality - bind once to carousel, not individual slides
+        carousel.addEventListener('click', (e) => {
+            const slide = e.target.closest('.slide');
+            if (slide && !e.target.closest('.arrow')) {
+                const slideIndex = [...slides].indexOf(slide);
+                openLightbox(slideIndex, slides);
+            }
         });
-    });
+        });
+    }
+
+    // Initialize carousels on page load
+    initCarousels();
 
     // ===================================
     // LIGHTBOX FUNCTIONALITY (Updated)
@@ -202,29 +207,75 @@ document.addEventListener('DOMContentLoaded', function() {
     function openLightbox(startIdx, slides) {
         const dlg = document.createElement('dialog');
         dlg.className = 'lightbox';
-        dlg.innerHTML = `
-            <button class="lb-close" aria-label="Close">×</button>
-            ${[...slides].map(s => s.innerHTML).join('')}
-            <button class="lb-prev" aria-label="Prev">‹</button>
-            <button class="lb-next" aria-label="Next">›</button>
-        `;
-        document.body.append(dlg);
+
+        // Create close button
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'lb-close';
+        closeBtn.setAttribute('aria-label', 'Close');
+        closeBtn.textContent = '×';
+
+        // Create navigation buttons
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'lb-prev';
+        prevBtn.setAttribute('aria-label', 'Prev');
+        prevBtn.textContent = '‹';
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'lb-next';
+        nextBtn.setAttribute('aria-label', 'Next');
+        nextBtn.textContent = '›';
+
+        // Add buttons to dialog
+        dlg.appendChild(closeBtn);
+        dlg.appendChild(prevBtn);
+        dlg.appendChild(nextBtn);
+
+        // Create media elements
+        const mediaItems = [];
+        slides.forEach(slide => {
+            const img = slide.querySelector('img');
+            const video = slide.querySelector('video');
+
+            if (img) {
+                const newImg = document.createElement('img');
+                newImg.src = img.src;
+                newImg.alt = img.alt || '';
+                newImg.style.display = 'none';
+                dlg.appendChild(newImg);
+                mediaItems.push(newImg);
+            } else if (video) {
+                const newVideo = document.createElement('video');
+                newVideo.src = video.src;
+                newVideo.controls = true;
+                newVideo.autoplay = true;
+                newVideo.loop = true;
+                newVideo.muted = true;
+                newVideo.style.display = 'none';
+                dlg.appendChild(newVideo);
+                mediaItems.push(newVideo);
+            }
+        });
+
+        document.body.appendChild(dlg);
         dlg.showModal();
 
         let idx = startIdx;
-        const imgs = dlg.querySelectorAll('img');
-        const render = () => imgs.forEach((im, i) => im.style.display = i === idx ? 'block' : 'none');
+        const render = () => {
+            mediaItems.forEach((item, i) => {
+                item.style.display = i === idx ? 'block' : 'none';
+            });
+        };
         render();
 
-        dlg.querySelector('.lb-next').onclick = () => {
-            idx = (idx + 1) % imgs.length;
+        nextBtn.onclick = () => {
+            idx = (idx + 1) % mediaItems.length;
             render();
         };
-        dlg.querySelector('.lb-prev').onclick = () => {
-            idx = (idx - 1 + imgs.length) % imgs.length;
+        prevBtn.onclick = () => {
+            idx = (idx - 1 + mediaItems.length) % mediaItems.length;
             render();
         };
-        dlg.querySelector('.lb-close').onclick = () => {
+        closeBtn.onclick = () => {
             dlg.close();
             dlg.remove();
         };
@@ -242,8 +293,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 dlg.close();
                 dlg.remove();
             }
-            if (e.key === 'ArrowRight') dlg.querySelector('.lb-next').click();
-            if (e.key === 'ArrowLeft') dlg.querySelector('.lb-prev').click();
+            if (e.key === 'ArrowRight') nextBtn.click();
+            if (e.key === 'ArrowLeft') prevBtn.click();
         });
     }
 
@@ -321,10 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Re-initialize functionality after page transitions
         window.swup.on('contentReplaced', function() {
             // Re-initialize carousels
-            document.querySelectorAll('.carousel').forEach(carousel => {
-                // Carousel initialization code would go here
-                // (Same as above carousel initialization)
-            });
+            initCarousels();
 
             // Re-initialize lazy loading
             initLazyLoading();
