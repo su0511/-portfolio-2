@@ -334,7 +334,7 @@ body {
 }
 
 .project-header {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
     font-size: 18px;
 }
 
@@ -783,3 +783,7 @@ html.is-rendering .transition-fade {
 }
 
 /* End of Swiss Portfolio Styles */
+video {
+    width: 100%; /* 使视频宽度占满父容器 */
+    height: auto; /* 保持比例，避免视频变形 */
+}
