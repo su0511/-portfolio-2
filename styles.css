@@ -722,6 +722,10 @@ body {
         background: rgba(0, 0, 0, 0.08);
         color: var(--color-black);
     }
+
+    .arrow {
+        color: var(--color-black);
+    }
 }
 
 /* ===================================
