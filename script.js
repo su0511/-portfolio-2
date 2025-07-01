@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Hover effects on interactive elements
         const interactiveElements = document.querySelectorAll(
-            'a, button, .project-carousel, .carousel-arrow, .lightbox-close, [role="button"]'
+            'a, button, .project-carousel, .carousel-arrow, .lightbox-close, .lb-arrow, [role="button"]'
         );
 
         interactiveElements.forEach(element => {
@@ -206,85 +206,97 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openLightbox(startIdx, slides) {
         console.log('Opening lightbox for slide:', startIdx);
+        let currentIdx = startIdx;
 
         // Create lightbox overlay
         const lightbox = document.createElement('div');
         lightbox.className = 'lightbox';
 
-        // Get the current slide's media
-        const currentSlide = slides[startIdx];
-        console.log('Current slide:', currentSlide);
+        // Function to update media content
+        const updateMedia = (idx) => {
+            // Clear existing media (including GIFs)
+            const existingMedia = lightbox.querySelector('img, video');
+            if (existingMedia) {
+                existingMedia.remove();
+            }
 
-        const img = currentSlide.querySelector('img');
-        const video = currentSlide.querySelector('video');
+            // Get the current slide's media
+            const currentSlide = slides[idx];
+            const img = currentSlide.querySelector('img');
+            const video = currentSlide.querySelector('video');
 
-        console.log('Found img:', img);
-        console.log('Found video:', video);
+            let mediaElement;
+            if (img) {
+                mediaElement = document.createElement('img');
+                mediaElement.src = img.src;
+                mediaElement.alt = img.alt || '';
 
-        let mediaElement;
-        if (img) {
-            mediaElement = document.createElement('img');
-            mediaElement.src = img.src;
-            mediaElement.alt = img.alt || '';
-            console.log('Created img with src:', img.src);
+                // Add some inline styles to ensure visibility
+                mediaElement.style.cssText = `
+                    max-width: 90vw !important;
+                    max-height: 90vh !important;
+                    object-fit: contain !important;
+                    display: block !important;
+                    margin: auto !important;
+                    opacity: 1 !important;
+                    position: relative !important;
+                    z-index: 10001 !important;
+                `;
+            } else if (video) {
+                mediaElement = document.createElement('video');
+                mediaElement.src = video.src;
+                mediaElement.controls = true;
+                mediaElement.autoplay = true;
+                mediaElement.loop = true;
+                mediaElement.muted = true;
 
-            // Add some inline styles to ensure visibility
-            mediaElement.style.cssText = `
-                max-width: 90vw !important;
-                max-height: 90vh !important;
-                object-fit: contain !important;
-                display: block !important;
-                margin: auto !important;
-                opacity: 1 !important;
-                position: relative !important;
-                z-index: 10001 !important;
-            `;
+                // Add some inline styles to ensure visibility
+                mediaElement.style.maxWidth = '90vw';
+                mediaElement.style.maxHeight = '90vh';
+                mediaElement.style.objectFit = 'contain';
+                mediaElement.style.display = 'block';
+            }
 
-            // Add load event listener
-            mediaElement.onload = () => {
-                console.log('Image loaded successfully, dimensions:', mediaElement.naturalWidth, 'x', mediaElement.naturalHeight);
-            };
-            mediaElement.onerror = () => {
-                console.error('Image failed to load:', img.src);
-                // Try to show error message in lightbox
-                const errorMsg = document.createElement('div');
-                errorMsg.textContent = 'Failed to load image: ' + img.src;
-                errorMsg.style.color = 'white';
-                errorMsg.style.fontSize = '18px';
-                lightbox.appendChild(errorMsg);
-            };
-        } else if (video) {
-            mediaElement = document.createElement('video');
-            mediaElement.src = video.src;
-            mediaElement.controls = true;
-            mediaElement.autoplay = true;
-            mediaElement.loop = true;
-            mediaElement.muted = true;
-            console.log('Created video with src:', video.src);
+            if (mediaElement) {
+                // Insert media before navigation arrows
+                const firstArrow = lightbox.querySelector('.lb-arrow');
+                if (firstArrow) {
+                    lightbox.insertBefore(mediaElement, firstArrow);
+                } else {
+                    lightbox.appendChild(mediaElement);
+                }
+            }
+        };
 
-            // Add some inline styles to ensure visibility
-            mediaElement.style.maxWidth = '90vw';
-            mediaElement.style.maxHeight = '90vh';
-            mediaElement.style.objectFit = 'contain';
-            mediaElement.style.display = 'block';
-        }
+        // Create navigation arrows (only if more than one slide)
+        if (slides.length > 1) {
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'lb-arrow lb-prev';
+            prevBtn.innerHTML = '‹';
+            prevBtn.addEventListener('click', () => {
+                currentIdx = (currentIdx - 1 + slides.length) % slides.length;
+                updateMedia(currentIdx);
+            });
+            lightbox.appendChild(prevBtn);
 
-        if (mediaElement) {
-            lightbox.appendChild(mediaElement);
-            console.log('Media element added to lightbox');
-        } else {
-            console.error('No media element found');
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'lb-arrow lb-next';
+            nextBtn.innerHTML = '›';
+            nextBtn.addEventListener('click', () => {
+                currentIdx = (currentIdx + 1) % slides.length;
+                updateMedia(currentIdx);
+            });
+            lightbox.appendChild(nextBtn);
         }
 
         // Create close button
         const closeBtn = document.createElement('button');
         closeBtn.className = 'lb-close';
         closeBtn.innerHTML = '×';
-        closeBtn.style.position = 'fixed';
-        closeBtn.style.top = '20px';
-        closeBtn.style.right = '20px';
-        closeBtn.style.zIndex = '10001';
         lightbox.appendChild(closeBtn);
+
+        // Initialize with first media
+        updateMedia(currentIdx);
 
         // Add to page
         document.body.appendChild(lightbox);
@@ -301,13 +313,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Keyboard close
+        // Keyboard navigation
         const handleKeydown = (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
                 document.removeEventListener('keydown', handleKeydown);
+            } else if (e.key === 'ArrowLeft' && slides.length > 1) {
+                currentIdx = (currentIdx - 1 + slides.length) % slides.length;
+                updateMedia(currentIdx);
+            } else if (e.key === 'ArrowRight' && slides.length > 1) {
+                currentIdx = (currentIdx + 1) % slides.length;
+                updateMedia(currentIdx);
             }
         };
+
         document.addEventListener('keydown', handleKeydown);
 
     }

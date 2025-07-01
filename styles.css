@@ -69,7 +69,7 @@ body {
     background: var(--color-black);
     position: fixed;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 10002;
     transform: translate(-50%, -50%);
     transition: transform 0.1s ease;
 }
@@ -555,6 +555,39 @@ body {
     background: rgba(0, 0, 0, 0.8);
 }
 
+/* Lightbox navigation arrows */
+.lb-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.lb-arrow:hover {
+    opacity: 1;
+}
+
+.lb-prev {
+    left: 50px;
+}
+
+.lb-next {
+    right: 50px;
+}
+
 /* ===================================
    INFO SECTION
    ================================== */
@@ -675,7 +708,7 @@ body {
         margin-bottom: var(--space-lg);
     }
 
-    .project-content {
+    .project-grid {
         grid-template-columns: 1fr;
         gap: var(--space-sm);
     }
@@ -700,6 +733,21 @@ body {
 
     .carousel-next {
         right: 12px;
+    }
+
+    /* Mobile lightbox arrows */
+    .lb-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .lb-prev {
+        left: 20px;
+    }
+
+    .lb-next {
+        right: 20px;
     }
 }
 
@@ -832,6 +880,48 @@ video {
 
 .carousel .is-active video {
     opacity: 1;
+}
+
+/* GIF styles - same as video styles */
+.carousel img[src$=".gif"] {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 保证原始比例显示，不裁剪 */
+    opacity: 0;
+    /* transition: opacity 0.3s ease; - Removed fade animation */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 居中 */
+}
+
+/* Project 2 GIF alignment - same as video alignment for projects 4, 5, 7 */
+.carousel[data-project="2"] img[src$=".gif"] {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    align-self: start;
+}
+
+.carousel .is-active img[src$=".gif"] {
+    opacity: 1;
+}
+
+/* Lightbox GIF styles - same as img and video */
+.lightbox img[src$=".gif"] {
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    object-fit: contain !important;
+    border: none !important;
+    outline: none !important;
+    display: block !important;
+    opacity: 1 !important;
 }
 
 /* Lightbox video styles moved above to combine with img styles */
