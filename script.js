@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('main-content');
 
     if (loader) {
-        // Hide loader after 2.4 seconds
+        // Hide loader after 1.8 seconds
         setTimeout(() => {
             loader.classList.add('hidden');
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Enable scrolling
                 document.body.style.overflow = 'auto';
             }, 800);
-        }, 2400);
+        }, 1800);
 
         // Disable scrolling during loading
         document.body.style.overflow = 'hidden';

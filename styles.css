@@ -160,7 +160,7 @@ body {
     font-size: 24px;
     margin-bottom: 2rem;
     opacity: 0;
-    animation: fadeInOut 2.4s ease-in-out;
+    animation: fadeInOut 1.8s ease-in-out;
 }
 
 .loader-progress {
@@ -174,7 +174,7 @@ body {
     width: 0;
     height: 100%;
     background: var(--color-black);
-    animation: progressBar 2.4s ease-out;
+    animation: progressBar 1.8s ease-out;
 }
 
 @keyframes fadeInOut {
@@ -257,7 +257,7 @@ body {
 }
 
 .explore-arrow {
-    margin-bottom: 60px;
+    margin-top: 12px;
     animation: arrowFloat 2s ease-in-out infinite;
 }
 
