@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ===================================
-    // CAROUSEL FUNCTIONALITY (New Structure)
+    // CAROUSEL FUNCTIONALITY (Enhanced)
     // ===================================
 
     function initCarousels() {
@@ -123,8 +123,31 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.carousel').forEach(carousel => {
         const slides = carousel.querySelectorAll('.slide');
         let idx = 0;
+        let isTransitioning = false;
 
-        const update = () => slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+        // Create indicators dynamically
+        createCarouselIndicators(carousel, slides.length);
+
+        const update = () => {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            // Update slides
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('is-active', i === idx);
+            });
+
+            // Update indicators
+            updateCarouselIndicators(carousel, idx, slides.length);
+
+            // Reset transition lock after animation completes
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 500);
+        };
+
+        // Initialize first slide
+        update();
 
         // Navigation buttons
         const nextBtn = carousel.querySelector('.next');
@@ -132,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (nextBtn) {
             nextBtn.onclick = () => {
+                if (isTransitioning) return;
                 idx = (idx + 1) % slides.length;
                 update();
             };
@@ -139,10 +163,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (prevBtn) {
             prevBtn.onclick = () => {
+                if (isTransitioning) return;
                 idx = (idx - 1 + slides.length) % slides.length;
                 update();
             };
         }
+
 
         // Hide arrows if only one slide
         if (slides.length <= 1) {
@@ -175,16 +201,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Keyboard navigation
+        // Enhanced keyboard navigation
         carousel.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' && prevBtn) {
+            if (e.key === 'ArrowLeft' && prevBtn && !isTransitioning) {
                 e.preventDefault();
                 prevBtn.click();
-            } else if (e.key === 'ArrowRight' && nextBtn) {
+                announceSlideChange(idx + 1, slides.length);
+            } else if (e.key === 'ArrowRight' && nextBtn && !isTransitioning) {
                 e.preventDefault();
                 nextBtn.click();
+                announceSlideChange(idx + 1, slides.length);
+            } else if (e.key === 'Home' && !isTransitioning) {
+                e.preventDefault();
+                idx = 0;
+                update();
+                announceSlideChange(1, slides.length);
+            } else if (e.key === 'End' && !isTransitioning) {
+                e.preventDefault();
+                idx = slides.length - 1;
+                update();
+                announceSlideChange(slides.length, slides.length);
             }
         });
+
+        // Make carousel focusable
+        carousel.setAttribute('tabindex', '0');
+        carousel.setAttribute('role', 'region');
+        carousel.setAttribute('aria-label', `Image carousel with ${slides.length} slides`);
 
         // Lightbox functionality - bind once to carousel, not individual slides
         carousel.addEventListener('click', (e) => {
@@ -197,8 +240,181 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ===================================
+    // CAROUSEL HELPER FUNCTIONS
+    // ===================================
+    
+    function createCarouselIndicators(carousel, slideCount) {
+        // Remove existing indicators if any
+        const existingIndicators = carousel.querySelector('.carousel-indicators');
+        if (existingIndicators) {
+            existingIndicators.remove();
+        }
+
+        // Always create counter for consistency
+        const indicators = document.createElement('div');
+        indicators.className = 'carousel-indicators';
+        
+        // Ensure high z-index to prevent coverage by other elements
+        indicators.style.zIndex = '99999';
+        
+        const counter = document.createElement('span');
+        counter.className = 'slide-counter';
+        counter.textContent = `1 / ${slideCount}`;
+        
+        indicators.appendChild(counter);
+        carousel.appendChild(indicators);
+    }
+
+    function updateCarouselIndicators(carousel, currentIndex, totalSlides) {
+        const counter = carousel.querySelector('.slide-counter');
+        
+        if (counter) {
+            counter.textContent = `${currentIndex + 1} / ${totalSlides}`;
+        }
+    }
+
+    // ===================================
+    // PROJECT NAVIGATION & PROGRESS
+    // ===================================
+    
+    function initProjectNavigation() {
+        const projects = document.querySelectorAll('.project');
+        const navItems = document.querySelectorAll('.project-nav-item');
+        const progressBar = document.querySelector('.progress-bar');
+        
+        // Smooth scroll to project
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = item.getAttribute('href');
+                const targetProject = document.querySelector(targetId);
+                
+                if (targetProject) {
+                    // Center the project title vertically in the viewport
+                    const elementTop = targetProject.getBoundingClientRect().top + window.pageYOffset;
+                    const viewportHeight = window.innerHeight;
+                    const offsetTop = elementTop - (viewportHeight / 2) + (targetProject.offsetHeight / 2);
+                    
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Update active nav item and progress on scroll
+        function updateNavigation() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            
+            // Update progress bar
+            if (progressBar) {
+                progressBar.style.width = `${Math.min(scrollPercent, 100)}%`;
+            }
+            
+            // Update active nav item
+            let activeProject = null;
+            projects.forEach((project, index) => {
+                const rect = project.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    activeProject = index;
+                }
+            });
+            
+            navItems.forEach((item, index) => {
+                item.classList.toggle('active', index === activeProject);
+            });
+        }
+        
+        // Throttled scroll handler
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            scrollTimeout = setTimeout(updateNavigation, 10);
+        });
+        
+        // Initial update
+        updateNavigation();
+    }
+
     // Initialize carousels on page load
     initCarousels();
+    
+    // Initialize project navigation
+    initProjectNavigation();
+
+    // ===================================
+    // ACCESSIBILITY HELPERS
+    // ===================================
+    
+    function announceSlideChange(current, total) {
+        const announcement = `Slide ${current} of ${total}`;
+        
+        // Create or update live region
+        let liveRegion = document.getElementById('slide-announcer');
+        if (!liveRegion) {
+            liveRegion = document.createElement('div');
+            liveRegion.id = 'slide-announcer';
+            liveRegion.className = 'sr-only';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.setAttribute('aria-atomic', 'true');
+            document.body.appendChild(liveRegion);
+        }
+        
+        liveRegion.textContent = announcement;
+    }
+
+    function initKeyboardNavigation() {
+        // Global keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Skip if user is typing in an input
+            if (e.target.matches('input, textarea, [contenteditable]')) return;
+            
+            switch(e.key) {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    e.preventDefault();
+                    const projectNum = parseInt(e.key);
+                    const projectTitle = document.getElementById(`project-${projectNum}-title`);
+                    if (projectTitle) {
+                        // Center the project title vertically in the viewport
+                        const elementTop = projectTitle.getBoundingClientRect().top + window.pageYOffset;
+                        const viewportHeight = window.innerHeight;
+                        const offsetTop = elementTop - (viewportHeight / 2) + (projectTitle.offsetHeight / 2);
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: prefersReducedMotion ? 'auto' : 'smooth'
+                        });
+                        projectTitle.focus();
+                    }
+                    break;
+                case 'h':
+                case 'H':
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+                    });
+                    break;
+            }
+        });
+    }
+
+    // Initialize keyboard navigation
+    initKeyboardNavigation();
 
     // ===================================
     // LIGHTBOX FUNCTIONALITY (Updated)
@@ -207,6 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function openLightbox(startIdx, slides) {
         console.log('Opening lightbox for slide:', startIdx);
         let currentIdx = startIdx;
+        let lightboxTransitioning = false;
 
         // Create lightbox overlay
         const lightbox = document.createElement('div');
@@ -274,8 +491,12 @@ document.addEventListener('DOMContentLoaded', function() {
             prevBtn.className = 'lb-arrow lb-prev';
             prevBtn.innerHTML = '‹';
             prevBtn.addEventListener('click', () => {
-                currentIdx = (currentIdx - 1 + slides.length) % slides.length;
-                updateMedia(currentIdx);
+                if (!lightboxTransitioning) {
+                    lightboxTransitioning = true;
+                    currentIdx = (currentIdx - 1 + slides.length) % slides.length;
+                    updateMedia(currentIdx);
+                    setTimeout(() => { lightboxTransitioning = false; }, 300);
+                }
             });
             lightbox.appendChild(prevBtn);
 
@@ -283,8 +504,12 @@ document.addEventListener('DOMContentLoaded', function() {
             nextBtn.className = 'lb-arrow lb-next';
             nextBtn.innerHTML = '›';
             nextBtn.addEventListener('click', () => {
-                currentIdx = (currentIdx + 1) % slides.length;
-                updateMedia(currentIdx);
+                if (!lightboxTransitioning) {
+                    lightboxTransitioning = true;
+                    currentIdx = (currentIdx + 1) % slides.length;
+                    updateMedia(currentIdx);
+                    setTimeout(() => { lightboxTransitioning = false; }, 300);
+                }
             });
             lightbox.appendChild(nextBtn);
         }
@@ -313,17 +538,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Keyboard navigation
+        // Keyboard navigation with smooth transition
         const handleKeydown = (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
                 document.removeEventListener('keydown', handleKeydown);
-            } else if (e.key === 'ArrowLeft' && slides.length > 1) {
+            } else if (e.key === 'ArrowLeft' && slides.length > 1 && !lightboxTransitioning) {
+                lightboxTransitioning = true;
                 currentIdx = (currentIdx - 1 + slides.length) % slides.length;
                 updateMedia(currentIdx);
-            } else if (e.key === 'ArrowRight' && slides.length > 1) {
+                setTimeout(() => { lightboxTransitioning = false; }, 300);
+            } else if (e.key === 'ArrowRight' && slides.length > 1 && !lightboxTransitioning) {
+                lightboxTransitioning = true;
                 currentIdx = (currentIdx + 1) % slides.length;
                 updateMedia(currentIdx);
+                setTimeout(() => { lightboxTransitioning = false; }, 300);
             }
         };
 
@@ -334,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ===================================
-    // IMAGE LAZY LOADING
+    // IMAGE LAZY LOADING & PRELOADING
     // ===================================
 
     function initLazyLoading() {
@@ -346,8 +575,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (entry.isIntersecting) {
                         const img = entry.target;
 
+                        // Show loading indicator
+                        showImageLoader(img);
+
                         // Add fade-in animation
                         img.addEventListener('load', () => {
+                            hideImageLoader(img);
                             if (!prefersReducedMotion) {
                                 img.style.opacity = '0';
                                 img.style.transition = 'opacity 0.3s ease';
@@ -356,6 +589,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                 });
                             }
                             img.classList.add('loaded');
+                            
+                            // Preload next images in carousel
+                            preloadNextImages(img);
+                        });
+
+                        img.addEventListener('error', () => {
+                            hideImageLoader(img);
+                            img.style.opacity = '0.5';
                         });
 
                         observer.unobserve(img);
@@ -369,6 +610,47 @@ document.addEventListener('DOMContentLoaded', function() {
             images.forEach(img => {
                 img.classList.add('loaded');
             });
+        }
+    }
+
+    function showImageLoader(img) {
+        const slide = img.closest('.slide');
+        if (slide && !slide.querySelector('.image-loader')) {
+            const loader = document.createElement('div');
+            loader.className = 'image-loader';
+            loader.innerHTML = '<div class="loader-spinner"></div>';
+            slide.appendChild(loader);
+        }
+    }
+
+    function hideImageLoader(img) {
+        const slide = img.closest('.slide');
+        if (slide) {
+            const loader = slide.querySelector('.image-loader');
+            if (loader) {
+                loader.remove();
+            }
+        }
+    }
+
+    function preloadNextImages(currentImg) {
+        const carousel = currentImg.closest('.carousel');
+        if (!carousel) return;
+        
+        const slides = carousel.querySelectorAll('.slide');
+        const currentSlide = currentImg.closest('.slide');
+        const currentIndex = [...slides].indexOf(currentSlide);
+        
+        // Preload next 2 images
+        for (let i = 1; i <= 2; i++) {
+            const nextIndex = (currentIndex + i) % slides.length;
+            const nextSlide = slides[nextIndex];
+            const nextImg = nextSlide.querySelector('img[loading="lazy"]:not(.loaded)');
+            
+            if (nextImg) {
+                const preloadImg = new Image();
+                preloadImg.src = nextImg.src;
+            }
         }
     }
 
@@ -396,28 +678,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // SWUP PAGE TRANSITIONS
     // ===================================
 
+    // Swup page transitions (optional enhancement)
     if (typeof Swup !== 'undefined') {
         try {
             window.swup = new Swup({
-                containers: ['#swup'],
-                animateHistoryBrowsing: true
+                containers: ['#main-content'],
+                animateHistoryBrowsing: true,
+                cache: false
             });
 
-            // Check if swup.on method exists before using it
-            if (window.swup && typeof window.swup.on === 'function') {
-                // Re-initialize functionality after page transitions
-                window.swup.on('contentReplaced', function() {
+            // Use the correct event listener syntax for Swup v4
+            if (window.swup && typeof window.swup.hooks === 'object') {
+                window.swup.hooks.on('page:view', () => {
                     // Re-initialize carousels
                     initCarousels();
+                    
+                    // Re-initialize project navigation
+                    initProjectNavigation();
 
                     // Re-initialize lazy loading
                     initLazyLoading();
                 });
-            } else {
-                console.log('Swup.on method not available');
             }
         } catch (error) {
-            console.log('Swup initialization failed:', error);
+            console.log('Swup not available or failed to initialize:', error);
         }
     }
 
@@ -431,8 +715,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize scroll snap
     initScrollSnap();
 
-    // Smooth scroll for anchor links
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    // Smooth scroll for anchor links (excluding project navigation)
+    const anchorLinks = document.querySelectorAll('a[href^="#"]:not(.project-nav-item)');
     anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
