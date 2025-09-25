@@ -387,8 +387,7 @@ body {
     margin: 0 auto; /* Center horizontally */
 }
 
-/* Project 1 and Project 4: 4:3 aspect ratio */
-.carousel[data-project="1"] img,
+/* Project 4: 4:3 aspect ratio */
 .carousel[data-project="4"] img {
     height: clamp(400px, 50vh, 600px); /* Same height as other projects */
     width: calc(clamp(400px, 50vh, 600px) * 4 / 3); /* 4:3 aspect ratio */
