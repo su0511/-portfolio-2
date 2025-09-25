@@ -125,9 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let idx = 0;
         let isTransitioning = false;
 
-        // Create indicators dynamically
-        createCarouselIndicators(carousel, slides.length);
-
         const update = () => {
             if (isTransitioning) return;
             isTransitioning = true;
@@ -136,9 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
             slides.forEach((slide, i) => {
                 slide.classList.toggle('is-active', i === idx);
             });
-
-            // Update indicators
-            updateCarouselIndicators(carousel, idx, slides.length);
 
             // Reset transition lock after animation completes
             setTimeout(() => {
@@ -243,36 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===================================
     // CAROUSEL HELPER FUNCTIONS
     // ===================================
-    
-    function createCarouselIndicators(carousel, slideCount) {
-        // Remove existing indicators if any
-        const existingIndicators = carousel.querySelector('.carousel-indicators');
-        if (existingIndicators) {
-            existingIndicators.remove();
-        }
-
-        // Always create counter for consistency
-        const indicators = document.createElement('div');
-        indicators.className = 'carousel-indicators';
-        
-        // Ensure high z-index to prevent coverage by other elements
-        indicators.style.zIndex = '99999';
-        
-        const counter = document.createElement('span');
-        counter.className = 'slide-counter';
-        counter.textContent = `1 / ${slideCount}`;
-        
-        indicators.appendChild(counter);
-        carousel.appendChild(indicators);
-    }
-
-    function updateCarouselIndicators(carousel, currentIndex, totalSlides) {
-        const counter = carousel.querySelector('.slide-counter');
-        
-        if (counter) {
-            counter.textContent = `${currentIndex + 1} / ${totalSlides}`;
-        }
-    }
 
     // ===================================
     // PROJECT NAVIGATION & PROGRESS

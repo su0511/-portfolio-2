@@ -387,6 +387,15 @@ body {
     margin: 0 auto; /* Center horizontally */
 }
 
+/* Project 1 and Project 4: 4:3 aspect ratio */
+.carousel[data-project="1"] img,
+.carousel[data-project="4"] img {
+    height: clamp(400px, 50vh, 600px); /* Same height as other projects */
+    width: calc(clamp(400px, 50vh, 600px) * 4 / 3); /* 4:3 aspect ratio */
+    max-width: 100%;
+    object-fit: cover; /* Cover to maintain aspect ratio */
+}
+
 /* Ensure GIFs follow the same rules as all other images */
 .carousel img[src$=".gif"] {
     height: clamp(400px, 50vh, 600px); /* Increased height to match other images */
@@ -485,28 +494,6 @@ body {
     background: var(--color-black);
     width: 0%;
     transition: width 0.1s ease;
-}
-
-/* ===================================
-   CAROUSEL INDICATORS
-   ================================== */
-
-.carousel-indicators {
-    position: absolute;
-    bottom: -32px;
-    right: 0;
-    display: flex;
-    align-items: center;
-    z-index: 99999 !important; /* High z-index to prevent coverage */
-}
-
-.slide-counter {
-    font-size: 11px;
-    font-weight: var(--font-weight-regular);
-    color: rgba(0, 0, 0, 0.6);
-    text-align: right;
-    min-height: 16px; /* Consistent height even for single slides */
-    white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* ===================================
@@ -971,20 +958,6 @@ body {
         right: -30px;
     }
 
-    .carousel-indicators {
-        bottom: -40px;
-        right: 0;
-        padding: 0;
-        background: none;
-        backdrop-filter: none;
-        z-index: 10; /* Ensure visibility on mobile */
-    }
-
-    .slide-counter {
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.7);
-        min-width: auto;
-    }
 
     .explore-indicator {
         transform: translate(-50%, calc(-50% + clamp(120px, 20vw, 200px) + 60px));
