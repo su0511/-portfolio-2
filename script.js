@@ -242,6 +242,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // PROJECT NAVIGATION & PROGRESS
     // ===================================
     
+    function getTargetTopWithOffset(targetEl) {
+        const elementTop = targetEl.getBoundingClientRect().top + window.pageYOffset;
+        return elementTop;
+    }
+
+    function scrollPreciselyTo(targetTop) {
+        const workContainer = document.querySelector('.work-container');
+        let previousSnapType;
+        if (workContainer) {
+            previousSnapType = workContainer.style.scrollSnapType;
+            workContainer.style.scrollSnapType = 'none';
+        }
+        window.scrollTo({
+            top: targetTop,
+            behavior: prefersReducedMotion ? 'auto' : 'smooth'
+        });
+        setTimeout(() => {
+            if (workContainer) {
+                workContainer.style.scrollSnapType = previousSnapType || 'y mandatory';
+            }
+        }, 400);
+    }
+
     function initProjectNavigation() {
         const projects = document.querySelectorAll('.project');
         const navItems = document.querySelectorAll('.project-nav-item');
@@ -255,15 +278,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const targetProject = document.querySelector(targetId);
                 
                 if (targetProject) {
-                    // Center the project title vertically in the viewport
-                    const elementTop = targetProject.getBoundingClientRect().top + window.pageYOffset;
-                    const viewportHeight = window.innerHeight;
-                    const offsetTop = elementTop - (viewportHeight / 2) + (targetProject.offsetHeight / 2);
-                    
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: prefersReducedMotion ? 'auto' : 'smooth'
-                    });
+                    const targetTop = getTargetTopWithOffset(targetProject);
+                    scrollPreciselyTo(targetTop);
                 }
             });
         });
@@ -353,15 +369,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const projectNum = parseInt(e.key);
                     const projectTitle = document.getElementById(`project-${projectNum}-title`);
                     if (projectTitle) {
-                        // Center the project title vertically in the viewport
-                        const elementTop = projectTitle.getBoundingClientRect().top + window.pageYOffset;
-                        const viewportHeight = window.innerHeight;
-                        const offsetTop = elementTop - (viewportHeight / 2) + (projectTitle.offsetHeight / 2);
-                        
-                        window.scrollTo({
-                            top: offsetTop,
-                            behavior: prefersReducedMotion ? 'auto' : 'smooth'
-                        });
+                        const targetTop = getTargetTopWithOffset(projectTitle);
+                        scrollPreciselyTo(targetTop);
                         projectTitle.focus();
                     }
                     break;
@@ -539,27 +548,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (entry.isIntersecting) {
                         const img = entry.target;
 
-                        // Show loading indicator
-                        showImageLoader(img);
+                        // Skip adding loading indicator per user request
 
-                        // Add fade-in animation
+                        // Load handler without fade animation
                         img.addEventListener('load', () => {
-                            hideImageLoader(img);
-                            if (!prefersReducedMotion) {
-                                img.style.opacity = '0';
-                                img.style.transition = 'opacity 0.3s ease';
-                                requestAnimationFrame(() => {
-                                    img.style.opacity = '1';
-                                });
-                            }
+                            // No loader overlay and no fade-in animation
                             img.classList.add('loaded');
-                            
                             // Preload next images in carousel
                             preloadNextImages(img);
                         });
 
                         img.addEventListener('error', () => {
-                            hideImageLoader(img);
+                            // No loader overlay to hide
                             img.style.opacity = '0.5';
                         });
 
@@ -577,25 +577,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function showImageLoader(img) {
-        const slide = img.closest('.slide');
-        if (slide && !slide.querySelector('.image-loader')) {
-            const loader = document.createElement('div');
-            loader.className = 'image-loader';
-            loader.innerHTML = '<div class="loader-spinner"></div>';
-            slide.appendChild(loader);
-        }
-    }
+    function showImageLoader(img) {}
 
-    function hideImageLoader(img) {
-        const slide = img.closest('.slide');
-        if (slide) {
-            const loader = slide.querySelector('.image-loader');
-            if (loader) {
-                loader.remove();
-            }
-        }
-    }
+    function hideImageLoader(img) {}
 
     function preloadNextImages(currentImg) {
         const carousel = currentImg.closest('.carousel');
@@ -679,16 +663,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize scroll snap
     initScrollSnap();
 
-    // Smooth scroll for anchor links (excluding project navigation)
+    // Smooth scroll for anchor links (excluding project navigation) with precise offset
     const anchorLinks = document.querySelectorAll('a[href^="#"]:not(.project-nav-item)');
     anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: prefersReducedMotion ? 'auto' : 'smooth'
-                });
+                const targetTop = getTargetTopWithOffset(target);
+                scrollPreciselyTo(targetTop);
             }
         });
     });
